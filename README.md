@@ -22,12 +22,12 @@ No complex boilerplate, no messy configurations. Just drop it in and play. When 
 Perfect for vanilla JS projects, static sites, or quick scripts. Add this script tag to your HTML:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/sumitkarn12/puff-state@1.0.0/dist/puff-state.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/sumitkarn12/puff-state@latest/dist/puff-state.min.js"></script>
 ```
 
 ## 🚀 Quick Start
 ```html
-<script src="https://cdn.jsdelivr.net/gh/sumitkarn12/puff-state@1.0.0/dist/puff-state.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/sumitkarn12/puff-state@latest/dist/puff-state.min.js"></script>
 <script>
   // 1. Initialize your persistent store
   const store = createPuffStore("user-preferences");

@@ -8,15 +8,63 @@
 	<!-- Bulma CSS CDN Integration -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
 	<style>
-		:root { --puff-bg: #0f172a; --puff-panel: #1e293b; --puff-border: #334155;}
-		.hero.is-puff { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #ffffff; }
-		.sandbox-panel { background-color: var(--puff-bg); color: #f8fafc; border-radius: 8px; }
-		.log-window { background-color: #020617; border: 1px solid var(--puff-border); border-radius: 6px; height: 220px; overflow-y: auto; font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; padding: 1rem; color: #34d399; }
-		.log-entry { border-left: 3px solid #10b981; padding-left: 0.5rem; margin-bottom: 0.4rem; }
-		pre { background-color: #020617 !important; color: #f8fafc !important; border-radius: 6px; padding: 1.25rem !important; }
-		code { background-color: transparent; color: #f472b6; padding: 0; }
-		.api-card { border-top: 4px solid #38bdf8; }
-		.tag.is-storage { background-color: #334155; color: #f8fafc; font-family: monospace; }
+		:root {
+			--puff-bg: #0f172a;
+			--puff-panel: #1e293b;
+			--puff-border: #334155;
+		}
+
+		.hero.is-puff {
+			background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+			color: #ffffff;
+		}
+
+		.sandbox-panel {
+			background-color: var(--puff-bg);
+			color: #f8fafc;
+			border-radius: 8px;
+		}
+
+		.log-window {
+			background-color: #020617;
+			border: 1px solid var(--puff-border);
+			border-radius: 6px;
+			height: 220px;
+			overflow-y: auto;
+			font-family: 'Courier New', Courier, monospace;
+			font-size: 0.85rem;
+			padding: 1rem;
+			color: #34d399;
+		}
+
+		.log-entry {
+			border-left: 3px solid #10b981;
+			padding-left: 0.5rem;
+			margin-bottom: 0.4rem;
+		}
+
+		pre {
+			background-color: #020617 !important;
+			color: #f8fafc !important;
+			border-radius: 6px;
+			padding: 1.25rem !important;
+		}
+
+		code {
+			background-color: transparent;
+			color: #f472b6;
+			padding: 0;
+		}
+
+		.api-card {
+			border-top: 4px solid #38bdf8;
+		}
+
+		.tag.is-storage {
+			background-color: #334155;
+			color: #f8fafc;
+			font-family: monospace;
+		}
 	</style>
 </head>
 
@@ -103,7 +151,18 @@
 									Include the distribution bundle directly from the script configuration tag to get
 									started instantly:
 								</p>
-								<pre><code>&lt;script src="https://cdn.jsdelivr.net/gh/sumitkarn12/puff-state@latest/dist/puff-state.min.js"&gt;&lt;/script&gt;</code></pre>
+				<div class="field has-addons" id="copy-cdn-link">
+					<div class="control is-expanded">
+						<input class="input" type="text" disabled value='&lt;script src="https://cdn.jsdelivr.net/gh/sumitkarn12/puff-state@latest/dist/puff-state.min.js"&gt;&lt;/script&gt;'>
+				  </div>
+						<div class="control">
+							<button class="button is-info"><span class="icon"><svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path
+									d="M7.5 3H14.6C16.8402 3 17.9603 3 18.816 3.43597C19.5686 3.81947 20.1805 4.43139 20.564 5.18404C21 6.03969 21 7.15979 21 9.4V16.5M6.2 21H14.3C15.4201 21 15.9802 21 16.408 20.782C16.7843 20.5903 17.0903 20.2843 17.282 19.908C17.5 19.4802 17.5 18.9201 17.5 17.8V9.7C17.5 8.57989 17.5 8.01984 17.282 7.59202C17.0903 7.21569 16.7843 6.90973 16.408 6.71799C15.9802 6.5 15.4201 6.5 14.3 6.5H6.2C5.0799 6.5 4.51984 6.5 4.09202 6.71799C3.71569 6.90973 3.40973 7.21569 3.21799 7.59202C3 8.01984 3 8.57989 3 9.7V17.8C3 18.9201 3 19.4802 3.21799 19.908C3.40973 20.2843 3.71569 20.5903 4.09202 20.782C4.51984 21 5.0799 21 6.2 21Z"
+									stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+							</svg></span></button>
+						</div>
+					</div>
 
 								<!-- API METHOD: createPuffStore -->
 								<div class="card api-card mb-5">
@@ -250,6 +309,7 @@ store.setState("notification", "Logged in!", false, 10000);</code></pre>
 
 	<!-- Core library linkage -->
 	<script src="https://cdn.jsdelivr.net/gh/sumitkarn12/puff-state@latest/dist/puff-state.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/sumitkarn12/asyncpop@latest/dist/asyncpop.min.js"></script>
 
 	<!-- Runtime Interactive Script Logic Sandbox -->
 	<script>
@@ -259,6 +319,16 @@ store.setState("notification", "Logged in!", false, 10000);</code></pre>
       logWindow = document.getElementById("logWindow");
       keysContainer = document.getElementById("activeKeysContainer");
       trackingKeys = new Set();
+      document.querySelector( "#copy-cdn-link button" ).addEventListener( "click", async ev => {
+        const cdn = document.querySelector( "#copy-cdn-link input" ).value;
+        try {
+          await navigator.clipboard.writeText( cdn );
+          await AsyncPop.alert('Text successfully copied to clipboard');
+        } catch (err) {
+          await AsyncPop.alert( 'Failed to copy text: ' + JSON.stringify( err ) );
+          console.error('Failed to copy text: ', err);
+        }
+      });
     document.getElementById("btnSetState").addEventListener("click", () => {
       const key = document.getElementById("stateKey").value.trim();
       const val = document.getElementById("stateValue").value.trim();
