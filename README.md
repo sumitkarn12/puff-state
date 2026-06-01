@@ -21,9 +21,23 @@ No complex boilerplate, no messy configurations. Just drop it in and play. When 
 ### Via CDN (Direct Browser Usage)
 Perfect for vanilla JS projects, static sites, or quick scripts. Add this script tag to your HTML:
 
+**Minified Script Tag**
 ```html
 <script src="https://cdn.jsdelivr.net/gh/sumitkarn12/puff-state@latest/dist/puff-state.min.js"></script>
 ```
+**Non-Minified Script Tag**
+```html
+<script src="https://cdn.jsdelivr.net/gh/sumitkarn12/puff-state@latest/dist/puff-state.js"></script>
+```
+**Minified CDN Link**
+```html
+https://cdn.jsdelivr.net/gh/sumitkarn12/puff-state@latest/dist/puff-state.min.js
+```
+**Non-Minified CDN Link**
+```html
+https://cdn.jsdelivr.net/gh/sumitkarn12/puff-state@latest/dist/puff-state.jsscript>
+```
+
 
 ## 🚀 Quick Start
 ```html
