@@ -1,7 +1,7 @@
 /**
  * Puff-State v1.0.0
  * An ultra-lightweight, reactive, persistent state manager with automatic TTL expiration.
- * https://github.com/YOUR_USERNAME/puff-state
+ * https://github.com/sumitkarn12/puff-state
  * * License: MIT
  */
 (function (global) {
