@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>💨 Puff-State | Reactive State & Storage Engine</title>
+	<!-- Bulma CSS CDN Integration -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+	<style>
+		:root { --puff-bg: #0f172a; --puff-panel: #1e293b; --puff-border: #334155;}
+		.hero.is-puff { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #ffffff; }
+		.sandbox-panel { background-color: var(--puff-bg); color: #f8fafc; border-radius: 8px; }
+		.log-window { background-color: #020617; border: 1px solid var(--puff-border); border-radius: 6px; height: 220px; overflow-y: auto; font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; padding: 1rem; color: #34d399; }
+		.log-entry { border-left: 3px solid #10b981; padding-left: 0.5rem; margin-bottom: 0.4rem; }
+		pre { background-color: #020617 !important; color: #f8fafc !important; border-radius: 6px; padding: 1.25rem !important; }
+		code { background-color: transparent; color: #f472b6; padding: 0; }
+		.api-card { border-top: 4px solid #38bdf8; }
+		.tag.is-storage { background-color: #334155; color: #f8fafc; font-family: monospace; }
+	</style>
+</head>
+
+<body>
+
+	<!-- HERO HEADER -->
+	<section class="hero is-puff is-small shadow">
+		<div class="hero-body">
+			<div class="container has-text-centered">
+				<h1 class="title is-1 has-text-sky">💨 Puff-State</h1>
+				<p class="subtitle is-4 has-text-grey-light">
+					An ultra-lightweight, reactive, persistent state manager with automatic TTL expiration.
+				</p>
+				<div class="tags is-centered">
+					<span class="tag is-info">~1KB Footprint</span>
+					<span class="tag is-primary">Zero Dependencies</span>
+					<span class="tag is-warning">MIT License</span>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- MAIN LAYOUT -->
+	<section class="section">
+		<div class="container">
+			<div class="columns is-desktop">
+
+				<!-- LEFT COLUMN: LIVE SANDBOX PLAYGROUND -->
+				<div class="column is-5-desktop">
+					<div class="box sandbox-panel shadow">
+						<h2 class="title is-4 has-text-sky border-bottom pb-2">1. Interactive Sandbox</h2>
+
+						<div class="field">
+							<label class="label has-text-grey-light">State Key</label>
+							<div class="control">
+								<input class="input" type="text" id="stateKey" value="user_session" placeholder="e.g., auth_token">
+              </div>
+							</div>
+
+							<div class="field">
+								<label class="label has-text-grey-light">Value (JSON/String)</label>
+								<div class="control">
+									<input class="input" type="text" id="stateValue" value="active_user" placeholder="e.g., dark-mode">
+              </div>
+								</div>
+
+								<div class="field">
+									<label class="label has-text-grey-light">Time-To-Live (TTL)</label>
+									<div class="control">
+										<div class="select is-fullwidth">
+											<select id="stateTTL">
+                    <option value="5000">5 Seconds</option>
+                    <option value="10000">10 Seconds</option>
+                    <option value="30000">30 Seconds</option>
+                    <option value="60000">1 Minute</option>
+                  </select>
+										</div>
+									</div>
+								</div>
+
+								<div class="field mt-5">
+									<button class="button is-link is-fullwidth" id="btnSetState">
+                Execute store.setState()
+              </button>
+								</div>
+
+								<hr style="background-color: var(--puff-border);">
+
+								<h3 class="subtitle is-5 has-text-sky mb-2">Subscriber Event Logs</h3>
+								<div class="log-window mb-4" id="logWindow">
+									<div class="has-text-grey">Waiting for state adjustments to broadcast...</div>
+								</div>
+
+								<h3 class="subtitle is-6 has-text-grey-light mb-2">Active Memory State Map:</h3>
+								<div id="activeKeysContainer" class="buttons"></div>
+							</div>
+						</div>
+
+						<!-- RIGHT COLUMN: FULL DETAILED API REFERENCES & USAGE -->
+						<div class="column is-7-desktop">
+							<div class="content">
+								<h2 class="title is-3">📚 Complete API Reference Manual</h2>
+								<p>
+									Include the distribution bundle directly from the script configuration tag to get
+									started instantly:
+								</p>
+								<pre><code>&lt;script src="../dist/puff-state.js"&gt;&lt;/script&gt;</code></pre>
+
+								<!-- API METHOD: createPuffStore -->
+								<div class="card api-card mb-5">
+									<header class="card-header">
+										<p class="card-header-title is-family-monospace">createPuffStore(name, config)
+										</p>
+									</header>
+									<div class="card-content">
+										<p>Initializes a global decoupled storage client instance bucketed under an
+											explicitly isolated namespace wrapper.</p>
+										<h6>Accepted Arguments:</h6>
+										<ul>
+											<li><strong><code>name</code></strong> <em>(String, Optional)</em>: The
+												persistence lookup namespace key. Defaults to <code>"puff-store"</code>.
+											</li>
+											<li><strong><code>config</code></strong> <em>(Object, Optional)</em>: Core
+												configuration overrides. Supports:
+												<ul>
+													<li><code>defaultExpiry</code>: Fallback key TTL lifespan in
+														milliseconds (Default: 365 days).</li>
+													<li><code>storage</code>: Underlying persistent Web Storage API
+														engine target (Default: <code>localStorage</code>).</li>
+												</ul>
+											</li>
+										</ul>
+										<h6>Code Usage Example:</h6>
+										<pre><code>const store = createPuffStore("app-cache", {
+  defaultExpiry: 60 * 60 * 1000, // 1 hour default
+  storage: sessionStorage        // Use sessionStorage instead
+});</code></pre>
+									</div>
+								</div>
+
+								<!-- API METHOD: init -->
+								<div class="card api-card mb-5">
+									<header class="card-header">
+										<p class="card-header-title is-family-monospace">store.init()</p>
+									</header>
+									<div class="card-content">
+										<p>Hydrates and syncs all non-expired structural variations out of hardware
+											persistent layers back into active in-memory Maps.</p>
+										<h6>Accepted Arguments:</h6>
+										<p>None.</p>
+										<h6>Code Usage Example:</h6>
+										<pre><code>// Invoke immediately on application startup bootstrapping
+store.init();</code></pre>
+									</div>
+								</div>
+
+								<!-- API METHOD: setState -->
+								<div class="card api-card mb-5">
+									<header class="card-header">
+										<p class="card-header-title is-family-monospace">store.setState(key, value,
+											dontFire, ttl)</p>
+									</header>
+									<div class="card-content">
+										<p>Commits a runtime variable structure updates into memory and persistent state
+											layers, automatically executing reactive hooks.</p>
+										<h6>Accepted Arguments:</h6>
+										<ul>
+											<li><strong><code>key</code></strong> <em>(String)</em>: Target state
+												property identifier.</li>
+											<li><strong><code>value</code></strong> <em>(Any)</em>: Serialized data
+												parameters payload.</li>
+											<li><strong><code>dontFire</code></strong> <em>(Boolean, Optional)</em>: Set
+												to <code>true</code> to perform quiet database mutations without
+												alerting active observers.</li>
+											<li><strong><code>ttl</code></strong> <em>(Number, Optional)</em>: Lifespan
+												limit overrides designated in milliseconds.</li>
+										</ul>
+										<h6>Code Usage Example:</h6>
+										<pre><code>// Stores values reactively that self-delete in exactly 10 seconds
+store.setState("notification", "Logged in!", false, 10000);</code></pre>
+									</div>
+								</div>
+
+								<!-- API METHOD: getState -->
+								<div class="card api-card mb-5">
+									<header class="card-header">
+										<p class="card-header-title is-family-monospace">store.getState(key)</p>
+									</header>
+									<div class="card-content">
+										<p>Queries memory layers for corresponding values. If timestamps have lapsed
+											past limits, data vanishes and returns <code>null</code>.</p>
+										<h6>Accepted Arguments:</h6>
+										<ul>
+											<li><strong><code>key</code></strong> <em>(String)</em>: The lookup property
+												identity.</li>
+										</ul>
+										<h6>Code Usage Example:</h6>
+										<pre><code>const activeTheme = store.getState("user_theme"); 
+// Returns value or null if expired/non-existent</code></pre>
+									</div>
+								</div>
+
+								<!-- API METHOD: subscribe -->
+								<div class="card api-card mb-5">
+									<header class="card-header">
+										<p class="card-header-title is-family-monospace">store.subscribe(key, callback)
+										</p>
+									</header>
+									<div class="card-content">
+										<p>Attaches a callback function triggered reactively every time a target key
+											updates value patterns via state methods.</p>
+										<h6>Accepted Arguments:</h6>
+										<ul>
+											<li><strong><code>key</code></strong> <em>(String)</em>: Target state key
+												property to actively map listeners onto.</li>
+											<li><strong><code>callback</code></strong> <em>(Function)</em>: Executable
+												execution chain signature: <code>(newValue, oldValue) => void</code>.
+											</li>
+										</ul>
+										<h6>Code Usage Example:</h6>
+										<pre><code>const unsubscribe = store.subscribe("user_theme", (next, prev) => {
+  document.body.className = next;
+});
+
+// Execute whenever cleaning up event handlers to prevent memory leaks
+// unsubscribe();</code></pre>
+									</div>
+								</div>
+
+								<!-- API METHOD: keys -->
+								<div class="card api-card mb-5">
+									<header class="card-header">
+										<p class="card-header-title is-family-monospace">store.keys()</p>
+									</header>
+									<div class="card-content">
+										<p>Retrieves an array representation mapping out all functional active keys
+											recorded across storage engines.</p>
+										<h6>Accepted Arguments:</h6>
+										<p>None.</p>
+										<h6>Code Usage Example:</h6>
+										<pre><code>console.log(store.keys()); // e.g., ["user_theme", "auth_token"]</code></pre>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+	</section>
+
+	<!-- Core library linkage -->
+	<script src="../dist/puff-state.js"></script>
+
+	<!-- Runtime Interactive Script Logic Sandbox -->
+	<script>
+		let store, logWindow, keysContainer, trackingKeys;
+    document.addEventListener( "DOMContentLoaded", () => {
+		  store = createPuffStore("demo-sandbox");
+      logWindow = document.getElementById("logWindow");
+      keysContainer = document.getElementById("activeKeysContainer");
+      trackingKeys = new Set();
+    document.getElementById("btnSetState").addEventListener("click", () => {
+      const key = document.getElementById("stateKey").value.trim();
+      const val = document.getElementById("stateValue").value.trim();
+      const ttl = parseInt(document.getElementById("stateTTL").value, 10);
+
+      if(!key || !val) return alert("Keys and Data Payloads cannot be left blank.");
+
+      // Register reactive listeners only once per unique sandbox key string
+      if (!trackingKeys.has(key)) {
+        store.subscribe(key, (newVal, oldVal) => {
+          appendLog(`Observer fired for [${key}]: ${oldVal} -> ${newVal}`);
+          renderKeys();
+        });
+        trackingKeys.add(key);
+      }
+
+      // Perform runtime execution mutations
+      store.setState(key, val, false, ttl);
+      appendLog(`Set state: "${key}" = "${val}" (Expires in ${ttl/1000}s)`);
+      renderKeys();
+
+      // Setup a visual UI timer sync to display the exact moment the node 'puffs' away
+      setTimeout(() => {
+        appendLog(`💨 TTL Expired! "${key}" vanished into a puff of smoke.`);
+        renderKeys();
+      }, ttl + 50);
+    });
+
+    // Hydrate persistent state instances
+    store.init();
+    renderKeys();
+    appendLog("Puff-State active database architecture engines loaded successfully.");
+    });
+
+    function appendLog(message) {
+      const entry = document.createElement("div");
+      entry.className = "log-entry";
+      entry.innerText = `[${new Date().toLocaleTimeString()}] ${message}`;
+      if(logWindow.innerHTML.includes("Waiting for state")) logWindow.innerHTML = "";
+      logWindow.appendChild(entry);
+      logWindow.scrollTop = logWindow.scrollHeight;
+    }
+
+    function renderKeys() {
+      keysContainer.innerHTML = "";
+      const currentKeys = store.keys();
+      currentKeys.forEach(k => {
+        const val = store.getState(k);
+        if (val !== null) {
+          const span = document.createElement("span");
+          span.className = "tag is-storage";
+          span.innerText = `${k}: "${val}"`;
+          keysContainer.appendChild(span);
+        }
+      });
+      if(store.keys().length === 0) {
+        keysContainer.innerHTML = "<em class='has-text-grey font-size-7'>No active fields in memory.</em>";
+        return;
+      }
+    }
+	</script>
+</body>
+
+</html>

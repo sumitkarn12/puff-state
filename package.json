@@ -1,0 +1,26 @@
+{
+  "name": "puff-state",
+  "version": "1.0.0",
+  "description": "An ultra-lightweight, reactive, persistent state manager with automatic TTL expiration.",
+  "main": "dist/puff-state.js",
+  "keywords": [
+    "state",
+    "reactive",
+    "localstorage",
+    "pubsub",
+    "cache",
+    "ttl",
+    "ephemeral",
+    "lightweight"
+  ],
+  "author": "Sumit Karn",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sumitkarn12/puff-state.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sumitkarn12/puff-state/issues"
+  },
+  "homepage": "https://github.com/sumitkarn12/puff-state#readme"
+}
