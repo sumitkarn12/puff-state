@@ -39,7 +39,12 @@ https://cdn.jsdelivr.net/gh/sumitkarn12/puff-state@latest/dist/puff-state.min.js
 ```html
 https://cdn.jsdelivr.net/gh/sumitkarn12/puff-state@latest/dist/puff-state.js
 ```
+## ⚠️ Breaking Changes & Notes
 
+If you are upgrading from a version prior to `v1.2.0`, please note the following optimizations:
+
+* **`.init()` is now a No-Op:** You no longer need to call `store.init()` to hydrate your data. The store automatically self-hydrates and self-clears expired keys on instantiation. The `init()` function is kept purely for backwards compatibility so your code won't break, but you can safely remove it.
+* **Falsy Value Bug Fix:** In previous versions, storing values like `0`, `false`, or `""` (empty strings) would accidentally trigger the internal garbage disposal system and delete the key. As of `v1.2.0`, these are handled as completely valid states and are preserved safely.
 
 ## 🚀 Quick Start
 ```html
@@ -86,6 +91,21 @@ Listens to changes for a specific key. Returns an unsubscription function.
 ### `store.getState(key)`
 
 Returns the current valid state value or `null` if expired/missing.
+
+## 🛑 Technical Limitations & Caveats
+
+To ensure optimal performance and stability when integrating `Puff-State` into production environments, please review the following architectural behaviors:
+
+* **⚡ Synchronous Storage Bottlenecks:** State reads hit browser disk storage (`localStorage`) synchronously on every single `getState()` call or subscriber verification loop. 
+  * *Warning:* Avoid binding `Puff-State` updates to high-frequency events like `onMouseMove`, `onScroll`, or rapid text inputs (`onChange`), as the synchronous disk I/O will cause noticeable UI stuttering.
+* **🧼 `store.keys()` Triggers Side-Effects:** Calling `.keys()` is not a pure read operation. It actively forces a scan over the entire store, purging expired items and committing updates to disk under the hood.
+  * *Warning:* Be aware that simply inspecting the array of active keys will automatically trigger a background cache garbage-collection cycle and a file-save routine.
+* **📦 Shallow JSON Serialization Limits:** Data persistence relies entirely on standard `JSON.stringify()`, which does not support complex, non-primitive JavaScript data types.
+  * *Warning:* Custom classes, `Date` objects, `Map`, `Set`, and functions will lose their prototypes or be wiped out during serialization. Additionally, storing circular objects will throw a fatal error and crash the execution thread.
+* **⚠️ Unhandled Quota Exceeded Crashes:** The library does *not* internally catch or suppress browser storage limits when writing updates to disk.
+  * *Warning:* If a user's browser hits its hard capacity threshold (typically _~5MB_ for `localStorage`), `setState()` will throw an unhandled `QuotaExceededError` and stop execution if not caught externally.
+* **🧱 Deprecated `init()` Hook:** The `.init()` hook exposed on the store instance is an empty, non-functional placeholder kept strictly for backwards compatibility.
+  * *Warning:* Cache hydration now happens automatically upon store instantiation. Calling `store.init()` manually does absolutely nothing.
 
 ## 📄 License
 
