@@ -26,7 +26,7 @@
     let get = (k) => {
       let v = state.get(k) || {};
       v = v.e > Date.now() ? v.v : null;
-      (!v && state.delete(k));
+      (v==null && state.delete(k));
       return v;
     };
 
