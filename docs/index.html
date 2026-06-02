@@ -181,8 +181,7 @@
 										</p>
 									</header>
 									<div class="card-content">
-										<p>Initializes a global decoupled storage client instance bucketed under an
-											explicitly isolated namespace wrapper.</p>
+										<p>Initializes an isolated reactive instance. Hydrates historical non-expired cache keys instantly on declaration without requiring manual hooks.</p>
 										<h6>Accepted Arguments:</h6>
 										<ul>
 											<li><strong><code>name</code></strong> <em>(String, Optional)</em>: The
@@ -203,22 +202,6 @@
   defaultExpiry: 60 * 60 * 1000, // 1 hour default
   storage: sessionStorage        // Use sessionStorage instead
 });</code></pre>
-									</div>
-								</div>
-
-								<!-- API METHOD: init -->
-								<div class="card api-card mb-5">
-									<header class="card-header">
-										<p class="card-header-title is-family-monospace">store.init()</p>
-									</header>
-									<div class="card-content">
-										<p>Hydrates and syncs all non-expired structural variations out of hardware
-											persistent layers back into active in-memory Maps.</p>
-										<h6>Accepted Arguments:</h6>
-										<p>None.</p>
-										<h6>Code Usage Example:</h6>
-										<pre><code>// Invoke immediately on application startup bootstrapping
-store.init();</code></pre>
 									</div>
 								</div>
 
@@ -367,8 +350,6 @@ store.setState("notification", "Logged in!", false, 10000);</code></pre>
       }, ttl + 50);
     });
 
-    // Hydrate persistent state instances
-    store.init();
     renderKeys();
     appendLog("Puff-State active database architecture engines loaded successfully.");
     });

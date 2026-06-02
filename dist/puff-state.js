@@ -1,5 +1,5 @@
 /**
- * Puff-State v1.0.0
+ * Puff-State v1.2.0
  * An ultra-lightweight, reactive, persistent state manager with automatic TTL expiration.
  * https://github.com/sumitkarn12/puff-state
  * * License: MIT
@@ -26,7 +26,7 @@
     let get = (k) => {
       let v = state.get(k) || {};
       v = v.e > Date.now() ? v.v : null;
-      (v==null && state.delete(k));
+      (v == null && state.delete(k));
       return v;
     };
 
@@ -39,10 +39,8 @@
       get: (k) => get(k),
       size: () => state.size,
       clear: () => { state.clear(); save(); },
-      clearExpireds: () => {
-        state.keys().forEach(k => get(k));
-      },
-      keys: () => [...state.keys()]
+      clearExpireds: () => Array.from(state.keys()).forEach(k => get(k)),
+      keys: () => Array.from(state.keys()).filter(k => get(k))
     };
   };
 
@@ -59,24 +57,17 @@
     let state = new Map();
 
     let set = (k, v, dontFire, ttl) => {
-      let s = state.get(k) || { v: null, e: new Set() };
-      let c = cache.get(k);
-      let oldVal = c;
-      s.v = v;
-      state.set(k, s);
+      let subs = state.get( k );
+      let oldVal = cache.get(k);
       cache.set(k, v, ttl);
 
-      if (!dontFire) {
-        s.e.forEach((callback) => callback(s.v, oldVal));
-      }
-      return s.v;
+      if (!dontFire && subs ) subs.forEach((callback) => callback(v, oldVal));
+      return v;
     };
 
     return {
       // Hydrates cache into reactive memory map
-      init: () => {
-        cache.keys().forEach(k => set(k, cache.get(k)));
-      },
+      init: () => {},
 
       // Get all active keys
       keys: () => cache.keys(),
@@ -89,12 +80,12 @@
 
       // Registers listener actions for key updates
       subscribe: (k, callback) => {
-        let s = state.get(k) || { v: null, e: new Set() };
-        s.e.add(callback);
-        state.set(k, s);
+        let subs = state.get(k) || new Set();
+        subs.add(callback);
+        state.set(k, subs);
 
         // Unsubscribe clean-up trigger
-        return () => s.e.delete(callback);
+        return () => subs.delete(callback);
       }
     };
   };

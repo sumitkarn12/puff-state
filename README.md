@@ -14,7 +14,9 @@ No complex boilerplate, no messy configurations. Just drop it in and play. When 
 * ⏳ **Built-in TTL (Time-To-Live):** Set custom expiration lifespans on individual state keys.
 * 🔮 **Reactive Pub/Sub:** UI elements can subscribe to specific keys and update automatically when state shifts.
 * 🧼 **Auto-Purging:** Dynamically wipes expired cache entries to keep the client storage completely clean.
-
+* 🚀 **Zero Boilerplate Auto-Hydration:** The store automatically syncs and purges expired keys on creation. No manual `.init()` function required!
+* 💾 **Direct Cache Sourcing:** Single-source architecture reads directly from storage, completely eliminating redundant in-memory tracking maps and lowering RAM overhead.
+* 🧼 **Falsy Value Safety:** Fixed a type-coercion bug. Valid falsy values like `0`, `false`, and `""` (empty strings) are now preserved safely instead of being accidentally deleted.
 
 ## 📦 Installation
 
@@ -41,24 +43,21 @@ https://cdn.jsdelivr.net/gh/sumitkarn12/puff-state@latest/dist/puff-state.js
 
 ## 🚀 Quick Start
 ```html
-<script src="https://cdn.jsdelivr.net/gh/sumitkarn12/puff-state@latest/dist/puff-state.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/sumitkarn12/puff-state@latest/dist/puff-state.js"></script>
 <script>
-  // 1. Initialize your persistent store
-  const store = createPuffStore("user-preferences");
+  // 1. Instantly creates and auto-hydrates the store
+  const store = createPuffStore("app-session");
 
-  // 2. Subscribe reactively to specific changes
-  const unsubscribe = store.subscribe("theme", (newTheme, oldTheme) => {
-    console.log(`Theme shifted from ${oldTheme} to ${newTheme}`);
-    document.body.className = newTheme;
+  // 2. Map structural triggers reactively
+  store.subscribe("theme", (nextValue, previousValue) => {
+    console.log(`Swapped settings from ${previousValue} to ${nextValue}`);
   });
 
-  // 3. Sync existing data from localStorage
-  store.init();
-
-  // 4. Update state with an explicit 1-hour expiration lifespan (in milliseconds)
-  store.setState("theme", "dark-mode", false, 60 * 60 * 1000);
+  // 3. Mutate fields with custom lifespans (15 seconds)
+  store.setState("theme", "emerald-lux", false, 15000);
 </script>
 ```
+
 
 ## 🛠️ API Reference
 
