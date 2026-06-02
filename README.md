@@ -35,7 +35,7 @@ https://cdn.jsdelivr.net/gh/sumitkarn12/puff-state@latest/dist/puff-state.min.js
 ```
 **Non-Minified CDN Link**
 ```html
-https://cdn.jsdelivr.net/gh/sumitkarn12/puff-state@latest/dist/puff-state.jsscript>
+https://cdn.jsdelivr.net/gh/sumitkarn12/puff-state@latest/dist/puff-state.js
 ```
 
 
